@@ -4,66 +4,78 @@
  *  Created on: 4 mars 2021
  *      Author: didier
  */
+#include "SkillTree.h"
 #include <iostream>
-#include "SkillTree.hpp"
 
 using namespace std;
 
-inline SkillTree::SkillTree() {
+int SkillTree::nbNode=0;
+int SkillTree::nbArbre=0;
+
+ SkillTree::SkillTree() {
 	skillName = "";
 	skillPoint = 0;
 	leftChild = NULL;
 	rightChild = NULL;
+	SkillTree::increaseNbArbre();
+	SkillTree::increaseNbNode();
 }
 
-inline SkillTree::SkillTree(string initName) {
+ SkillTree::SkillTree(string initName) {
 	skillName = initName;
 	skillPoint = 0;
 	leftChild = NULL;
 	rightChild = NULL;
+	SkillTree::increaseNbArbre();
+	SkillTree::increaseNbNode();
 }
 
-inline SkillTree::SkillTree(string initName, SkillTree *left,
+ SkillTree::SkillTree(string initName, SkillTree *left,
 		SkillTree *right) {
 	skillName = initName;
 	skillPoint = 0;
 	leftChild = left;
 	rightChild = right;
+	SkillTree::increaseNbArbre();
+	SkillTree::increaseNbNode();
+
 }
 
-inline SkillTree::~SkillTree() {
-	this->deleteTree(this);
+ SkillTree::~SkillTree() {
+	SkillTree *left = leftChild;
+	SkillTree *right = rightChild;
+	SkillTree::removeNbNode();
+	SkillTree::removeNbArbre();
+
+	if (left != NULL) {
+		left->~SkillTree();
+	}
+	if (right != NULL) {
+		right->~SkillTree();
+	}
+
+	delete(this);
 }
 
-inline void SkillTree::setLeftSkillTree(SkillTree *skillTree) {
+ void SkillTree::setLeftSkillTree(SkillTree *skillTree) {
 	leftChild = skillTree;
+	SkillTree::removeNbNode();
 }
 
-inline void SkillTree::setRightSkillTree(SkillTree *skillTree) {
+ void SkillTree::setRightSkillTree(SkillTree *skillTree) {
 	rightChild = skillTree;
+	SkillTree::removeNbNode();
 }
 
-inline void SkillTree::addSkillPoint() {
+ void SkillTree::addSkillPoint() {
 	skillPoint++;
 }
 
-inline void SkillTree::setName(string newName) {
-	SkillTree::skillName = newName;
+ void SkillTree::setName(string newName) {
+	skillName = newName;
 }
 
-inline void SkillTree::deleteTree(SkillTree *root) {
-	SkillTree *left = root->leftChild;
-	SkillTree *right = root->rightChild;
-	if (left != NULL) {
-		deleteTree(left);
-	}
-	if (right != NULL) {
-		deleteTree(right);
-	}
-	delete (root);
-}
-
-inline void SkillTree::resetSkillPoint() {
+ void SkillTree::resetSkillPoint() {
 	skillPoint = 0;
 	if (leftChild != NULL) {
 		leftChild->resetSkillPoint();
@@ -74,7 +86,7 @@ inline void SkillTree::resetSkillPoint() {
 
 }
 
-inline int SkillTree::getDepth() {
+ int SkillTree::getDepth() {
 	if (leftChild == NULL and rightChild == NULL) {
 		return 0;
 	}
@@ -86,8 +98,8 @@ inline int SkillTree::getDepth() {
 	}
 	return 1 + max(leftChild->getDepth(), rightChild->getDepth());
 }
-
-inline void SkillTree::display() {
+//Add method body
+ void SkillTree::display() {
 	cout << skillName << " : " << skillPoint << endl;
 	if (leftChild != NULL) {
 		leftChild->display();
@@ -96,3 +108,22 @@ inline void SkillTree::display() {
 		rightChild->display();
 	}
 }
+ void SkillTree::increaseNbArbre(){
+	SkillTree::nbArbre++;
+}
+ void SkillTree::removeNbArbre(){
+	SkillTree::nbArbre--;
+}
+ void SkillTree::increaseNbNode(){
+	SkillTree::nbNode++;
+}
+ void SkillTree::removeNbNode(){
+	SkillTree::nbNode--;
+}
+ int SkillTree::getNbArbre(){
+	return SkillTree::nbArbre;
+}
+ int SkillTree::getNbNode(){
+	return SkillTree::nbNode;
+}
+
